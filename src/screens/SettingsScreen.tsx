@@ -6,11 +6,11 @@ import {
   StyleSheet, 
   Alert, 
   ActivityIndicator,
-  ScrollView
+  ScrollView,
+  Share
 } from 'react-native';
 import { StorageService } from '../services/StorageService';
 import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 import { ref, set } from 'firebase/database';
 import { database } from '../services/firebaseConfig';
 import { GoogleDriveService } from '../services/GoogleDriveService';
@@ -24,17 +24,11 @@ export const SettingsScreen = () => {
       setIsExporting(true);
       const data = await StorageService.exportSessionData();
       
-      // Créer un fichier temporaire
-      const fileUri = `${FileSystem.documentDirectory}safety_validator_export.txt`;
-      await FileSystem.writeAsStringAsync(fileUri, data);
-
-      // Vérifier si le partage est disponible
-      const isAvailable = await Sharing.isAvailableAsync();
-      if (isAvailable) {
-        await Sharing.shareAsync(fileUri);
-      } else {
-        Alert.alert('Erreur', 'Le partage n\'est pas disponible sur cet appareil');
-      }
+      await Share.share({
+        message: data,
+        title: 'Safety Validator Export'
+      });
+      
     } catch (error) {
       console.error('Erreur export:', error);
       Alert.alert('Erreur', 'Impossible d\'exporter les données');

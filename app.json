@@ -14,12 +14,29 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.007trm2024.SafetyValidatorApp",
-      "config": {
-        "googleSignIn": {
-          "reservedClientId": "com.googleusercontent.apps.767823040006-famgh0hqcsr64o7045fipsu4k7jrqp2c"
-        }
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "L'application nécessite l'accès Bluetooth pour se connecter à l'appareil de détection",
+        "NSBluetoothPeripheralUsageDescription": "L'application utilise le Bluetooth pour recevoir les données vidéo",
+        "UIBackgroundModes": [
+          "bluetooth-central",
+          "audio",
+          "fetch",
+          "location"
+        ],
+        "NSLocationWhenInUseUsageDescription": "L'application nécessite l'accès à la localisation pour le suivi GPS",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "L'application nécessite l'accès à la localisation en arrière-plan",
+        "NSCameraUsageDescription": "L'application nécessite l'accès à la caméra pour la capture vidéo",
+        "NSMicrophoneUsageDescription": "L'application nécessite l'accès au microphone pour l'enregistrement audio",
+        "NSPhotoLibraryUsageDescription": "L'application nécessite l'accès à votre galerie pour sauvegarder les vidéos d'accidents évités",
+        "NSPhotoLibraryAddUsageDescription": "L'application nécessite l'accès à votre galerie pour sauvegarder les vidéos d'accidents évités"
       }
     },
-    "sdkVersion": "52.0.0"
+    "plugins": [
+      "expo-location",
+      "expo-file-system",
+      "expo-av",
+      "expo-media-library"
+    ]
   }
 }

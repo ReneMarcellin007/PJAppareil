@@ -6,6 +6,8 @@ import { ChoiceScreen } from './src/screens/ChoiceScreen';
 import { DriverScreen } from './src/screens/DriverScreen';
 import { ValidatorScreen } from './src/screens/ValidatorScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
+import { VisualizationScreen } from './src/screens/VisualizationScreen';
+import { AccidentDetailsScreen } from './src/screens/AccidentDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +45,16 @@ export default function App() {
           name="Settings" 
           component={SettingsScreen} 
           options={{ title: 'Paramètres' }}
+        />
+        <Stack.Screen 
+          name="Visualization" 
+          component={VisualizationScreen} 
+          options={{ title: 'Visualisation' }}
+        />
+        <Stack.Screen 
+          name="AccidentDetails" 
+          component={AccidentDetailsScreen} 
+          options={{ title: 'Détails Accident' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

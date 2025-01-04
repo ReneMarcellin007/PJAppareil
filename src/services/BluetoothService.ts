@@ -50,6 +50,33 @@ export class BluetoothService {
   isConnected(): boolean {
     return this.connected;
   }
+
+  async saveVideoFromDevice(videoData: Blob, sessionId: string): Promise<string> {
+    try {
+      // 1. Sauvegarder localement
+      const fileName = `accident_${sessionId}_${Date.now()}.mp4`;
+      const filePath = `${FileSystem.documentDirectory}${fileName}`;
+
+      // 2. Sauvegarder dans Firebase Storage
+      const videoRef = storageRef(storage, `accidents/${sessionId}/${fileName}`);
+      await uploadBytes(videoRef, videoData);
+      const firebaseUrl = await getDownloadURL(videoRef);
+
+      // 3. Sauvegarder localement aussi
+      await FileSystem.writeAsStringAsync(filePath, await videoData.text(), {
+        encoding: FileSystem.EncodingType.UTF8
+      });
+
+      // 4. Retourner les deux URLs
+      return JSON.stringify({
+        localPath: filePath,
+        firebaseUrl: firebaseUrl
+      });
+    } catch (error) {
+      console.error('Erreur sauvegarde vidéo:', error);
+      throw error;
+    }
+  }
 }
 
 export const bluetoothService = BluetoothService.getInstance();

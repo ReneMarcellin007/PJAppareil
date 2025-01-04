@@ -4,6 +4,7 @@ import { GoogleDriveService } from './GoogleDriveService';
 import { database, storage } from './firebaseConfig';
 import { ref, set, push, get } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { BluetoothService } from './BluetoothService';
 
 export class StorageService {
   private static readonly KEYS = {
@@ -12,17 +13,24 @@ export class StorageService {
     PENDING_EXPORTS: '@pending_exports',
   };
 
-  static async saveLocationData(data: LocationData): Promise<void> {
+  static async saveLocationData(data: LocationData, videoData?: Blob): Promise<void> {
     try {
-      console.log('Sauvegarde données:', data); // Debug
+      let videoInfo = null;
+      
+      if (videoData) {
+        const videoResult = await BluetoothService.saveVideoFromDevice(videoData, data.sessionId);
+        videoInfo = JSON.parse(videoResult);
+      }
 
-      // 1. Sauvegarder dans Firebase
+      // Sauvegarder dans Firebase Realtime Database
       const locationRef = ref(database, `sessions/${data.sessionId}/locationData`);
       await push(locationRef, {
         ...data,
+        videoPath: videoInfo?.localPath,
+        videoUrl: videoInfo?.firebaseUrl,
         timestamp: new Date().toISOString()
       });
-
+      console.log('Sauvegarde données:', data); // Debug
       // 2. Sauvegarder localement
       const currentSession = await this.getCurrentSession();
       if (currentSession) {
@@ -33,7 +41,10 @@ export class StorageService {
         );
       }
 
-      console.log('Données sauvegardées avec succès'); // Debug
+      console.log('Données sauvegardées avec succès:', {
+        ...data,
+        videoInfo
+      });
     } catch (error) {
       console.error('Erreur sauvegarde:', error);
       throw error;

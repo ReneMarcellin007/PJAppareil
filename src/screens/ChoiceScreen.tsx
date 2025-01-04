@@ -32,6 +32,14 @@ export const ChoiceScreen = () => {
         >
           <Text style={styles.buttonText}>Paramètres</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.button, styles.visualizationButton]}
+          onPress={() => navigation.navigate('Visualization')}
+        >
+          <Text style={styles.buttonText}>Visualisation</Text>
+          <Text style={styles.buttonSubtext}>Voir les accidents évités</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -85,5 +93,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     marginTop: 5,
+  },
+  visualizationButton: {
+    backgroundColor: '#9b59b6',
+    marginTop: 10,
   },
 });
